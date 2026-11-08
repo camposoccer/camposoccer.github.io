@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campo Boys Soccer Calendars</title>
+<meta name="description" content="Subscribe to Campolindo boys soccer game schedules in Apple or Google Calendar. Updated daily from the school athletics site.">
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #14202e; --muted: #5b6776;
+    --line: #e2e6eb; --accent: #12355b; --accent-ink: #ffffff; --chip: #eef2f7;
+    --home: #1d6b3a; --away: #8a4b08;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f141a; --card: #171e26; --ink: #e8edf2; --muted: #9aa6b2;
+      --line: #263140; --accent: #8fb8e6; --accent-ink: #0f141a; --chip: #1f2833;
+      --home: #6fcf97; --away: #f2b46b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+  h1 { font-size: 1.7rem; line-height: 1.2; margin: 0 0 6px; }
+  .lede { color: var(--muted); margin: 0 0 24px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .card h2 { font-size: 1.1rem; margin: 0 0 2px; }
+  .card .count { color: var(--muted); font-size: .9rem; margin: 0 0 14px; }
+  .btn { display: block; text-align: center; text-decoration: none; font-weight: 600; font-size: .95rem;
+         padding: 10px 12px; border-radius: 10px; margin-top: 8px; border: 1px solid var(--line);
+         color: var(--ink); background: var(--chip); cursor: pointer; width: 100%; font-family: inherit; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  section { margin-top: 32px; }
+  section h2 { font-size: 1.2rem; margin: 0 0 10px; }
+  ol.steps { padding-left: 20px; margin: 0; }
+  ol.steps li { margin-bottom: 6px; }
+  .note { color: var(--muted); font-size: .92rem; }
+  table { width: 100%; border-collapse: collapse; background: var(--card);
+          border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: .93rem; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; }
+  tr:last-child td { border-bottom: 0; }
+  .ha-home { color: var(--home); font-weight: 600; } .ha-away { color: var(--away); font-weight: 600; }
+  .filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .filter button { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px;
+                   padding: 5px 12px; font: inherit; font-size: .88rem; cursor: pointer; }
+  .filter button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--bg);
+           padding: 8px 14px; border-radius: 8px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  @media (max-width: 520px) { .hide-sm { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Campo Boys Soccer Calendars</h1>
+  <p class="lede">Subscribe once and Campolindo's boys soccer games appear in your phone's calendar.
+    Updated every day around noon from the school athletics site, so time changes and new games show up on their own.</p>
+
+  <div class="grid" id="feeds"></div>
+
+  <section>
+    <h2>How to subscribe</h2>
+    <ol class="steps">
+      <li><strong>iPhone, iPad or Mac:</strong> tap <em>Apple Calendar</em> under your player's team, then tap <em>Subscribe</em>.</li>
+      <li><strong>Google Calendar:</strong> tap <em>Google Calendar</em>, then <em>Add</em>. On Android, do this in a web browser once; the games then show in the Google Calendar app.</li>
+      <li><strong>Outlook or anything else:</strong> tap <em>Copy link</em> and add it as a calendar "from the internet" or "by URL".</li>
+    </ol>
+    <p class="note">Google Calendar checks subscribed calendars on its own timetable, usually every 12–24 hours, so a change can take up to a day to appear there. Apple devices refresh more often. Times are from the school site; confirm last-minute changes with the coach.</p>
+  </section>
+
+  <section>
+    <h2>Upcoming games</h2>
+    <div class="filter" id="filter" role="group" aria-label="Filter by team"></div>
+    <table>
+      <thead><tr><th>Date</th><th>Team</th><th>Game</th><th class="hide-sm">Where</th></tr></thead>
+      <tbody id="games"><tr><td colspan="4" class="note">Loading…</td></tr></tbody>
+    </table>
+    <p class="note" id="source"></p>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const FEEDS = [
+    { slug: "varsity",    name: "Varsity",    label: "Varsity" },
+    { slug: "jv",         name: "JV",         label: "JV" },
+    { slug: "frosh-soph", name: "Frosh/Soph", label: "Frosh/Soph" },
+    { slug: "all-levels", name: "All levels", label: null },
+  ];
+  const base = new URL(".", location.href);
+  const httpsUrl = slug => new URL(slug + ".ics", base).href;
+  const webcalUrl = slug => httpsUrl(slug).replace(/^https?:/, "webcal:");
+  const googleUrl = slug => "https://calendar.google.com/calendar/r?cid=" + encodeURIComponent(webcalUrl(slug));
+
+  function toast(msg) {
+    const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 1800);
+  }
+  async function copy(text) {
+    try { await navigator.clipboard.writeText(text); toast("Link copied"); }
+    catch (e) { window.prompt("Copy this calendar link:", text); }
+  }
+
+  function renderFeeds(games) {
+    const wrap = document.getElementById("feeds");
+    wrap.innerHTML = "";
+    for (const f of FEEDS) {
+      const n = games ? games.filter(g => !f.label || g.label === f.label).length : null;
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `<h2>${f.name}</h2><p class="count">${n === null ? "" : n + " games this season"}</p>
+        <a class="btn primary" href="${webcalUrl(f.slug)}">Apple Calendar</a>
+        <a class="btn" href="${googleUrl(f.slug)}" target="_blank" rel="noopener">Google Calendar</a>
+        <button class="btn" type="button">Copy link</button>`;
+      card.querySelector("button").addEventListener("click", () => copy(httpsUrl(f.slug)));
+      wrap.appendChild(card);
+    }
+  }
+
+  let ALL = [], active = "All";
+  function fmtDate(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+  function fmtTime(hm) {
+    if (!hm) return "Time TBA";
+    const [h, m] = hm.split(":").map(Number);
+    return new Date(2000, 0, 1, h, m).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+  function renderGames() {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const rows = ALL.filter(g => (active === "All" || g.label === active) &&
+                                 new Date(g.day + "T12:00:00") >= today);
+    const body = document.getElementById("games");
+    if (!rows.length) { body.innerHTML = `<tr><td colspan="4" class="note">No upcoming games listed.</td></tr>`; return; }
+    body.innerHTML = rows.map(g => `<tr>
+        <td>${fmtDate(g.day)}<br><span class="note">${fmtTime(g.start)}</span></td>
+        <td>${esc(g.label)}</td>
+        <td><span class="${g.home ? "ha-home" : "ha-away"}">${g.home ? "vs" : "@"}</span> ${esc(g.opponent)}${g.result ? " · " + esc(g.result) : ""}</td>
+        <td class="hide-sm">${esc(g.location)}</td></tr>`).join("");
+  }
+  function renderFilter() {
+    const el = document.getElementById("filter");
+    el.innerHTML = "";
+    for (const name of ["All", "Varsity", "JV", "Frosh/Soph"]) {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = name; b.setAttribute("aria-pressed", String(name === active));
+      b.addEventListener("click", () => { active = name; renderFilter(); renderGames(); });
+      el.appendChild(b);
+    }
+  }
+
+  renderFeeds(null);
+  fetch(new URL("schedule.json", base), { cache: "no-cache" })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(games => {
+      ALL = games; renderFeeds(games); renderFilter(); renderGames();
+      document.getElementById("source").innerHTML =
+        'Source: <a href="https://www.campoathletics.com/sport/soccer/boys/?tab=schedule">campoathletics.com boys soccer schedule</a>.';
+    })
+    .catch(() => {
+      document.getElementById("games").innerHTML =
+        '<tr><td colspan="4" class="note">Schedule list unavailable right now; the calendar links above still work.</td></tr>';
+    });
+</script>
+</body>
+</html>

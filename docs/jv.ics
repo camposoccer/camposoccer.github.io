@@ -1,0 +1,270 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Campo Soccer Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Campo JV Boys Soccer
+X-WR-TIMEZONE:America/Los_Angeles
+X-WR-CALDESC:Campolindo boys soccer games\, updated daily from https://www.
+ campoathletics.com. Always confirm with the coach.
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:623988ace466503b-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20261119T023000Z
+DTEND:20261119T041500Z
+SUMMARY:Campo JV Soccer vs Monte Vista
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Danville\, CA\nOfficial schedule: https://www.campoathletics.com
+ /sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:71436b87e8bdbaf5-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20261203T000000Z
+DTEND:20261203T014500Z
+SUMMARY:Campo JV Soccer @ Richmond
+LOCATION:Richmond High School\, 1250 23rd St\, Richmond\, CA 94804
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Ric
+ hmond\, Richmond\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:515a6f3b9b4c6fb6-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20261205T003000Z
+DTEND:20261205T021500Z
+SUMMARY:Campo JV Soccer vs Head Royce
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:a9fcfa822f3fdb11-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20261209T013000Z
+DTEND:20261209T031500Z
+SUMMARY:Campo JV Soccer vs Mt. Diablo
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:4ad7250a02f96f02-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20261211T013000Z
+DTEND:20261211T031500Z
+SUMMARY:Campo JV Soccer @ Acalanes
+LOCATION:Acalanes High School\, 1200 Pleasant Hill Rd\, Lafayette\, CA 9454
+ 9
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Aca
+ lanes\, Lafayette\, CA\nOfficial schedule: https://www.campoathletics.com/
+ sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:1d5076bde93027d5-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20261216T013000Z
+DTEND:20261216T031500Z
+SUMMARY:Campo JV Soccer @ Benicia
+LOCATION:Benicia High School\, 1101 Military W\, Benicia\, CA 94510
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Ben
+ icia\, Benicia\, CA\nOfficial schedule: https://www.campoathletics.com/spo
+ rt/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:f889104ebd0a3023-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270106T013000Z
+DTEND:20270106T031500Z
+SUMMARY:Campo JV Soccer vs Clayton Valley
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:88cca6e89aa4acf9-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270108T013000Z
+DTEND:20270108T031500Z
+SUMMARY:Campo JV Soccer vs Bishop O'Dowd
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:51aface511e168e0-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART;VALUE=DATE:20270109
+DTEND;VALUE=DATE:20270110
+TRANSP:TRANSPARENT
+SUMMARY:Campo JV Soccer @ Miramonte (time TBA)
+LOCATION:Miramonte High School\, 750 Moraga Way\, Orinda\, CA 94563
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Mir
+ amonte\, Orinda\, CA\nStart time: TBA on the school site\nOfficial schedul
+ e: https://www.campoathletics.com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:6bf04dd1f5c5ac3f-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270113T013000Z
+DTEND:20270113T031500Z
+SUMMARY:Campo JV Soccer @ Northgate
+LOCATION:Northgate High School\, 425 Castle Rock Rd\, Walnut Creek\, CA 945
+ 98
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Nor
+ thgate\, Walnut Creek\, CA\nOfficial schedule: https://www.campoathletics.
+ com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:bf324c69d1857c3f-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270115T013000Z
+DTEND:20270115T031500Z
+SUMMARY:Campo JV Soccer vs Las Lomas
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:5c406380a357526b-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270120T013000Z
+DTEND:20270120T031500Z
+SUMMARY:Campo JV Soccer vs Ygnacio Valley
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:20cb2f526f89f7cc-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270122T013000Z
+DTEND:20270122T031500Z
+SUMMARY:Campo JV Soccer @ Mt. Diablo
+LOCATION:Mt. Diablo High School\, 2450 Grant St\, Concord\, CA 94520
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Mt.
+  Diablo\, Concord\, CA\nOfficial schedule: https://www.campoathletics.com/
+ sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:e3540a97ceb32283-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270127T013000Z
+DTEND:20270127T031500Z
+SUMMARY:Campo JV Soccer vs Acalanes
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:b62a84cf1cd5aecf-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270129T013000Z
+DTEND:20270129T031500Z
+SUMMARY:Campo JV Soccer @ Clayton Valley
+LOCATION:Clayton Valley Charter High School\, 1101 Alberta Way\, Concord\, 
+ CA 94521
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Cla
+ yton Valley\, Concord\, CA\nOfficial schedule: https://www.campoathletics.
+ com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:2e4b8412fbb6e13f-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART;VALUE=DATE:20270202
+DTEND;VALUE=DATE:20270203
+TRANSP:TRANSPARENT
+SUMMARY:Campo JV Soccer vs TBD (time TBA)
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nStart time: TBA on the school site\nOfficial schedu
+ le: https://www.campoathletics.com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:906756c100e8e58d-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270205T013000Z
+DTEND:20270205T031500Z
+SUMMARY:Campo JV Soccer vs Northgate
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:de019d1ee4142638-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART;VALUE=DATE:20270206
+DTEND;VALUE=DATE:20270207
+TRANSP:TRANSPARENT
+SUMMARY:Campo JV Soccer vs TBD (time TBA)
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nStart time: TBA on the school site\nOfficial schedu
+ le: https://www.campoathletics.com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:4b93f3f8a726837f-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270210T013000Z
+DTEND:20270210T031500Z
+SUMMARY:Campo JV Soccer @ Las Lomas
+LOCATION:Las Lomas High School\, 1460 S Main St\, Walnut Creek\, CA 94596
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Las
+  Lomas\, Walnut Creek\, CA\nOfficial schedule: https://www.campoathletics.
+ com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:2b29b02533058842-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270212T013000Z
+DTEND:20270212T031500Z
+SUMMARY:Campo JV Soccer @ Ygnacio Valley
+LOCATION:Ygnacio Valley High School\, 755 Oak Grove Rd\, Concord\, CA 94518
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Ygn
+ acio Valley\, Concord\, CA\nOfficial schedule: https://www.campoathletics.
+ com/sport/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:67a8f97f19ce0082-jv@campo-soccer-calendar
+DTSTAMP:20261108T231931Z
+DTSTART:20270213T230000Z
+DTEND:20270214T004500Z
+SUMMARY:Campo JV Soccer vs Miramonte
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nOfficial schedule: https://www.campoathletics.com/s
+ port/soccer/boys/?tab=schedule
+CATEGORIES:Soccer
+END:VEVENT
+END:VCALENDAR
