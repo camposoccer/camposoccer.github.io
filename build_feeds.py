@@ -43,6 +43,7 @@ SPORT_PAGE = "/sport/soccer/boys/?tab=schedule"
 SCHEDULE_ENDPOINT = "/sport/RefreshScheduleStyle3ViewComponent/{team_id}?schoolYear={year}"
 TZ = ZoneInfo("America/Los_Angeles")
 GAME_LENGTH = timedelta(minutes=105)  # 80-minute game + halftime + warm-up buffer
+CALENDAR_COLOR = "#D81B60"  # Google Calendar's "Cherry blossom"; Apple Calendar uses this as a hint
 
 # Known team ids on the site (used if the level menu can't be read).
 DEFAULT_LEVELS = {
@@ -246,6 +247,7 @@ def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
         f"X-WR-CALNAME:{ics_escape(cal_name)}",
         "X-WR-TIMEZONE:America/Los_Angeles",
         f"X-WR-CALDESC:{ics_escape('Campolindo boys soccer games, updated daily from ' + SITE + '. Always confirm with the coach.')}",
+        f"X-APPLE-CALENDAR-COLOR:{CALENDAR_COLOR}",
         "REFRESH-INTERVAL;VALUE=DURATION:PT6H",
         "X-PUBLISHED-TTL:PT6H",
     ]
