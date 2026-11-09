@@ -192,6 +192,8 @@ def parse_schedule(html: str, level: str, school_year: str) -> list[Game]:
         city = clean(facility_spans[1].get_text()) if len(facility_spans) > 1 else ""
         for bad, good in CITY_FIXES.items():
             city = city.replace(bad, good)
+        if "campolindo" in facility.lower():
+            city = "Moraga, CA"  # the site sometimes shows the wrong city on home games
 
         result_cell = row.select_one('td[data-label="RESULTS"]')
         result = clean(result_cell.get_text()) if result_cell else ""
