@@ -12,7 +12,7 @@ REFRESH-INTERVAL;VALUE=DURATION:PT6H
 X-PUBLISHED-TTL:PT6H
 BEGIN:VEVENT
 UID:623988ace466503b-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20261119T023000Z
 DTEND:20261119T041500Z
 SUMMARY:Campo JV Soccer vs Monte Vista
@@ -24,7 +24,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:71436b87e8bdbaf5-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20261203T000000Z
 DTEND:20261203T014500Z
 SUMMARY:Campo JV Soccer @ Richmond
@@ -36,7 +36,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:515a6f3b9b4c6fb6-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20261205T003000Z
 DTEND:20261205T021500Z
 SUMMARY:Campo JV Soccer vs Head Royce
@@ -48,7 +48,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:a9fcfa822f3fdb11-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20261209T013000Z
 DTEND:20261209T031500Z
 SUMMARY:Campo JV Soccer vs Mt. Diablo
@@ -60,7 +60,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:4ad7250a02f96f02-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20261211T013000Z
 DTEND:20261211T031500Z
 SUMMARY:Campo JV Soccer @ Acalanes
@@ -73,7 +73,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:1d5076bde93027d5-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20261216T013000Z
 DTEND:20261216T031500Z
 SUMMARY:Campo JV Soccer @ Benicia
@@ -85,7 +85,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:f889104ebd0a3023-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270106T013000Z
 DTEND:20270106T031500Z
 SUMMARY:Campo JV Soccer vs Clayton Valley
@@ -97,7 +97,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:88cca6e89aa4acf9-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270108T013000Z
 DTEND:20270108T031500Z
 SUMMARY:Campo JV Soccer vs Bishop O'Dowd
@@ -109,20 +109,35 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:51aface511e168e0-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART;VALUE=DATE:20270109
 DTEND;VALUE=DATE:20270110
 TRANSP:TRANSPARENT
-SUMMARY:Campo JV Soccer @ Miramonte (time TBA)
+SUMMARY:Campo JV Soccer @ Miramonte – Time TBD
 LOCATION:Miramonte High School\, 750 Moraga Way\, Orinda\, CA 94563
 DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Mir
- amonte\, Orinda\, CA\nStart time: TBA on the school site\nOfficial schedul
- e: https://www.campoathletics.com/sport/soccer/boys/?tab=schedule
+ amonte\, Orinda\, CA\nStart time: TBD (not yet posted by the school)\nOffi
+ cial schedule: https://www.campoathletics.com/sport/soccer/boys/?tab=sched
+ ule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:placeholder-51aface511e168e0-jv@campo-soccer-calendar
+DTSTAMP:20261114T203915Z
+DTSTART:20270109T080000Z
+DTEND:20270109T110000Z
+SUMMARY:[Time TBD] Campo JV Soccer @ Miramonte Placeholder
+LOCATION:Miramonte High School\, 750 Moraga Way\, Orinda\, CA 94563
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nAway game\nSite: Mir
+ amonte\, Orinda\, CA\nStart time: TBD (not yet posted by the school)\nOffi
+ cial schedule: https://www.campoathletics.com/sport/soccer/boys/?tab=sched
+ ule\nPlaceholder at 12:00-3:00 AM\, as on the school's own calendar. The s
+ chool hasn't posted the real time yet\; this disappears once it does.
 CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:6bf04dd1f5c5ac3f-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270113T013000Z
 DTEND:20270113T031500Z
 SUMMARY:Campo JV Soccer @ Northgate
@@ -135,7 +150,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:bf324c69d1857c3f-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270115T013000Z
 DTEND:20270115T031500Z
 SUMMARY:Campo JV Soccer vs Las Lomas
@@ -147,7 +162,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:5c406380a357526b-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270120T013000Z
 DTEND:20270120T031500Z
 SUMMARY:Campo JV Soccer vs Ygnacio Valley
@@ -159,7 +174,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:20cb2f526f89f7cc-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270122T013000Z
 DTEND:20270122T031500Z
 SUMMARY:Campo JV Soccer @ Mt. Diablo
@@ -171,7 +186,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:e3540a97ceb32283-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270127T013000Z
 DTEND:20270127T031500Z
 SUMMARY:Campo JV Soccer vs Acalanes
@@ -183,7 +198,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:b62a84cf1cd5aecf-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270129T013000Z
 DTEND:20270129T031500Z
 SUMMARY:Campo JV Soccer @ Clayton Valley
@@ -196,20 +211,35 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:2e4b8412fbb6e13f-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART;VALUE=DATE:20270202
 DTEND;VALUE=DATE:20270203
 TRANSP:TRANSPARENT
-SUMMARY:Campo JV Soccer vs TBD (time TBA)
+SUMMARY:Campo JV Soccer vs TBD – Time TBD
 LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
 DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
- polindo\, Moraga\, CA\nStart time: TBA on the school site\nOfficial schedu
- le: https://www.campoathletics.com/sport/soccer/boys/?tab=schedule
+ polindo\, Moraga\, CA\nStart time: TBD (not yet posted by the school)\nOff
+ icial schedule: https://www.campoathletics.com/sport/soccer/boys/?tab=sche
+ dule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:placeholder-2e4b8412fbb6e13f-jv@campo-soccer-calendar
+DTSTAMP:20261114T203915Z
+DTSTART:20270202T080000Z
+DTEND:20270202T110000Z
+SUMMARY:[Time TBD] Campo JV Soccer vs TBD Placeholder
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nStart time: TBD (not yet posted by the school)\nOff
+ icial schedule: https://www.campoathletics.com/sport/soccer/boys/?tab=sche
+ dule\nPlaceholder at 12:00-3:00 AM\, as on the school's own calendar. The 
+ school hasn't posted the real time yet\; this disappears once it does.
 CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:906756c100e8e58d-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270205T013000Z
 DTEND:20270205T031500Z
 SUMMARY:Campo JV Soccer vs Northgate
@@ -221,20 +251,35 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:de019d1ee4142638-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART;VALUE=DATE:20270206
 DTEND;VALUE=DATE:20270207
 TRANSP:TRANSPARENT
-SUMMARY:Campo JV Soccer vs TBD (time TBA)
+SUMMARY:Campo JV Soccer vs TBD – Time TBD
 LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
 DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
- polindo\, Moraga\, CA\nStart time: TBA on the school site\nOfficial schedu
- le: https://www.campoathletics.com/sport/soccer/boys/?tab=schedule
+ polindo\, Moraga\, CA\nStart time: TBD (not yet posted by the school)\nOff
+ icial schedule: https://www.campoathletics.com/sport/soccer/boys/?tab=sche
+ dule
+CATEGORIES:Soccer
+END:VEVENT
+BEGIN:VEVENT
+UID:placeholder-de019d1ee4142638-jv@campo-soccer-calendar
+DTSTAMP:20261114T203915Z
+DTSTART:20270206T080000Z
+DTEND:20270206T110000Z
+SUMMARY:[Time TBD] Campo JV Soccer vs TBD Placeholder
+LOCATION:Campolindo High School\, 300 Moraga Rd\, Moraga\, CA 94556
+DESCRIPTION:Campolindo Boys Soccer – Junior Varsity\nHome game\nSite: Cam
+ polindo\, Moraga\, CA\nStart time: TBD (not yet posted by the school)\nOff
+ icial schedule: https://www.campoathletics.com/sport/soccer/boys/?tab=sche
+ dule\nPlaceholder at 12:00-3:00 AM\, as on the school's own calendar. The 
+ school hasn't posted the real time yet\; this disappears once it does.
 CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:4b93f3f8a726837f-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270210T013000Z
 DTEND:20270210T031500Z
 SUMMARY:Campo JV Soccer @ Las Lomas
@@ -246,7 +291,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:2b29b02533058842-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270212T013000Z
 DTEND:20270212T031500Z
 SUMMARY:Campo JV Soccer @ Ygnacio Valley
@@ -258,7 +303,7 @@ CATEGORIES:Soccer
 END:VEVENT
 BEGIN:VEVENT
 UID:67a8f97f19ce0082-jv@campo-soccer-calendar
-DTSTAMP:20261109T004327Z
+DTSTAMP:20261114T203915Z
 DTSTART:20270213T230000Z
 DTEND:20270214T004500Z
 SUMMARY:Campo JV Soccer vs Miramonte
