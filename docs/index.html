@@ -57,8 +57,14 @@
 <body>
 <main>
   <h1>Campo Boys Soccer Calendars</h1>
+  <p class="note" style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card)">
+    <strong>Parents:</strong> please subscribe through the school's official calendar at
+    <a href="https://www.campoathletics.com/calendar">campoathletics.com/calendar</a>: pick your player's team in the
+    Team menu, then tap <em>Subscribe to Calendar</em>. This page is a cross-check that compares the school's calendar
+    with its schedule pages every day.</p>
   <p class="lede">Subscribe once and Campolindo's boys soccer games appear in your phone's calendar.
-    Updated every day around noon from the school athletics site, so time changes and new games show up on their own.</p>
+    Checked against the school athletics site twice a day, so time changes and new games show up on their own.</p>
+  <p class="note" id="checked"></p>
 
   <div class="grid" id="feeds"></div>
 
@@ -71,6 +77,7 @@
     </ol>
     <p class="note"><strong>Calendar colour:</strong> Apple devices usually pick up Cherry Blossom red automatically. In Google Calendar, open the ⋮ menu next to the calendar's name and choose <em>Cherry blossom</em>; in Apple Calendar, tap ⓘ next to the calendar to change it.</p>
     <p class="note">Google Calendar checks subscribed calendars on its own timetable, usually every 12–24 hours, so a change can take up to a day to appear there. Apple devices refresh more often. Times are from the school site; confirm last-minute changes with the coach.</p>
+    <p class="note"><strong>Games without a start time yet</strong> appear twice: as an all-day item marked "Time TBD", and as a "[Time TBD] … Placeholder" at 12:00–3:00 AM (matching the school's own calendar). Both update on their own once the school posts the real time.</p>
   </section>
 
   <section>
@@ -128,7 +135,7 @@
     return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
   }
   function fmtTime(hm) {
-    if (!hm) return "Time TBA";
+    if (!hm) return "Time TBD";
     const [h, m] = hm.split(":").map(Number);
     return new Date(2000, 0, 1, h, m).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
   }
@@ -158,6 +165,14 @@
   }
 
   renderFeeds(null);
+  fetch(new URL("status.json", base), { cache: "no-cache" })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(s => {
+      const d = new Date(s.last_checked);
+      document.getElementById("checked").textContent = "Last checked against the school site: " +
+        d.toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) + ".";
+    })
+    .catch(() => {});
   fetch(new URL("schedule.json", base), { cache: "no-cache" })
     .then(r => r.ok ? r.json() : Promise.reject(r.status))
     .then(games => {

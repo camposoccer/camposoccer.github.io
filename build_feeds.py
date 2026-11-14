@@ -96,6 +96,7 @@ class Game:
     facility: str
     city: str
     result: str         # "" when no result yet
+    status: str = ""    # "Cancelled" / "Postponed" when the site says so
 
     @property
     def location(self) -> str:
@@ -113,10 +114,12 @@ class Game:
     def title(self) -> str:
         where = "vs" if self.home else "@"
         t = f"Campo {self.label} Soccer {where} {self.opponent}"
+        if self.status:
+            t = f"{self.status.upper()} – {t}"
         if self.result:
             t += f" ({self.result})"
         elif self.start is None:
-            t += " (time TBA)"
+            t += " – Time TBD"
         return t
 
 
@@ -140,10 +143,16 @@ def discover_levels(session: requests.Session) -> dict[str, str]:
         soup = BeautifulSoup(http_get(session, SPORT_PAGE), "html.parser")
         menu = soup.select_one("select.schedule-submenu")
         found = {o.get_text(strip=True): o.get("value") for o in menu.find_all("option")} if menu else {}
-        levels = {name: tid for name, tid in found.items() if name in LEVEL_INFO and tid}
-        if levels:
-            return levels
-        print("! Level menu not found; using known team ids", file=sys.stderr)
+        levels = dict(DEFAULT_LEVELS)
+        for name in LEVEL_INFO:
+            if found.get(name):
+                levels[name] = found[name]
+            else:
+                print(f"! '{name}' is not in the site's level menu; using its known team id", file=sys.stderr)
+        extra = [n for n in found if n not in LEVEL_INFO]
+        if extra:
+            print(f"! The site lists levels this calendar doesn't cover: {', '.join(extra)}", file=sys.stderr)
+        return levels
     except requests.RequestException as e:
         print(f"! Could not read level menu ({e}); using known team ids", file=sys.stderr)
     return dict(DEFAULT_LEVELS)
@@ -152,36 +161,77 @@ def discover_levels(session: requests.Session) -> dict[str, str]:
 # --------------------------------------------------------------------------
 # Parsing
 # --------------------------------------------------------------------------
-DATE_TIME_RE = re.compile(
-    r"^(?P<mon>[A-Za-z]{3})\s+(?P<day>\d{1,2})\s*/\s*(?P<time>TBA|TBD|\d{1,2}:\d{2}\s*[AaPp][Mm])$"
-)
+DATE_TIME_RE = re.compile(r"^(?P<mon>[A-Za-z]{3,9})\.?\s+(?P<day>\d{1,2})\s*/\s*(?P<time>.*)$")
+STATUS_WORDS = {"cancel": "Cancelled", "canc": "Cancelled", "postpone": "Postponed", "ppd": "Postponed",
+                "resched": "Rescheduled"}
+
+
+def parse_time(text: str) -> time | None:
+    """'7:15 PM', '4 PM', '4:00 p.m.', 'Noon', '19:00' -> time; 'TBA'/'TBD'/'' -> None. Else ValueError."""
+    s = re.sub(r"[\s.]", "", text).upper()
+    if s in ("", "TBA", "TBD"):
+        return None
+    if s == "NOON":
+        return time(12, 0)
+    for fmt in ("%I:%M%p", "%I%p", "%H:%M"):
+        try:
+            return datetime.strptime(s, fmt).time()
+        except ValueError:
+            pass
+    raise ValueError(f"unreadable start time '{text}'")
+
+
+def status_from(text: str) -> str:
+    low = text.lower()
+    return next((v for k, v in STATUS_WORDS.items() if k in low), "")
+
+
+def site_statuses(soup) -> dict[tuple[str, str], str]:
+    """Cancelled/postponed flags from the structured data the site embeds per game."""
+    out = {}
+    for s in soup.find_all("script", type="application/ld+json"):
+        try:
+            j = json.loads(s.string or s.get_text())
+        except json.JSONDecodeError:
+            continue
+        st = (j.get("eventStatus") or "").rsplit("/", 1)[-1]
+        word = {"EventCancelled": "Cancelled", "EventPostponed": "Postponed", "EventRescheduled": "Rescheduled"}.get(st)
+        if word and j.get("startDate"):
+            teams = [j.get("homeTeam", {}).get("name", ""), j.get("awayTeam", {}).get("name", "")]
+            opp = next((n for n in teams if "campolindo" not in n.lower()), "")
+            out[(j["startDate"][:10], re.sub(r"[^a-z0-9]", "", opp.lower()))] = word
+    return out
 
 
 def clean(s: str | None) -> str:
     return re.sub(r"\s+", " ", s or "").strip()
 
 
-def parse_schedule(html: str, level: str, school_year: str) -> list[Game]:
+def parse_schedule(html: str, level: str, school_year: str) -> tuple[list[Game], list[str]]:
+    """Every row on the site becomes a game, or a problem that stops publishing. Nothing is skipped."""
     slug, label = LEVEL_INFO[level]
     first_year, second_year = (int(y) for y in school_year.split("-"))
     soup = BeautifulSoup(html, "html.parser")
+    statuses = site_statuses(soup)
     games: list[Game] = []
+    problems: list[str] = []
 
     for row in soup.find_all("tr"):
         dt_el = row.select_one(".event-date-time")
         if not dt_el:
             continue  # header, ad, or practice row
-        m = DATE_TIME_RE.match(clean(dt_el.get_text()))
-        if not m:
-            print(f"! Skipping unreadable date '{clean(dt_el.get_text())}' ({level})", file=sys.stderr)
+        raw = clean(dt_el.get_text())
+        m = DATE_TIME_RE.match(raw)
+        try:
+            if not m:
+                raise ValueError(f"unreadable date '{raw}'")
+            month = datetime.strptime(m["mon"][:3].title(), "%b").month
+            year = first_year if month >= 7 else second_year
+            day = date(year, month, int(m["day"]))
+            start = parse_time(m["time"])
+        except ValueError as e:
+            problems.append(f"{level}: {e} (row: {raw})")
             continue
-
-        month = datetime.strptime(m["mon"], "%b").month
-        year = first_year if month >= 7 else second_year
-        day = date(year, month, int(m["day"]))
-        start = None
-        if m["time"].upper() not in ("TBA", "TBD"):
-            start = datetime.strptime(m["time"].upper().replace(" ", ""), "%I:%M%p").time()
 
         at_vs = clean((row.select_one('[class*="event-at-vs"]') or BeautifulSoup("", "html.parser")).get_text())
         opponent = clean(row.select_one(".event-opponent").get_text()) if row.select_one(".event-opponent") else "TBD"
@@ -197,14 +247,15 @@ def parse_schedule(html: str, level: str, school_year: str) -> list[Game]:
 
         result_cell = row.select_one('td[data-label="RESULTS"]')
         result = clean(result_cell.get_text()) if result_cell else ""
-        if not re.search(r"\d", result):
-            result = ""  # "- -" means not played yet
+        status = statuses.get((day.isoformat(), re.sub(r"[^a-z0-9]", "", opponent.lower())), "") or status_from(result)
+        if status or not re.search(r"[A-Za-z0-9]", result):
+            result = ""  # "- -" means not played yet; a status word becomes the title prefix
 
         home = at_vs.upper() == "VS" if at_vs else "campolindo" in facility.lower()
-        games.append(Game(level, slug, label, day, start, home, opponent or "TBD", facility, city, result))
+        games.append(Game(level, slug, label, day, start, home, opponent or "TBD", facility, city, result, status))
 
     games.sort(key=lambda g: (g.day, g.start or time(0)))
-    return games
+    return games, problems
 
 
 # --------------------------------------------------------------------------
@@ -239,6 +290,10 @@ def event_uid(g: Game, seen: dict[str, int]) -> str:
     return f"{digest}-{g.slug}@campo-soccer-calendar"
 
 
+PLACEHOLDER_START = time(0, 0)            # TBD games: 12:00-3:00 AM, as on the school's own calendar
+PLACEHOLDER_LENGTH = timedelta(hours=3)
+
+
 def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
     lines = [
         "BEGIN:VCALENDAR",
@@ -261,7 +316,9 @@ def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
             f"Site: {g.facility}{', ' + g.city if g.city else ''}",
         ]
         if g.start is None:
-            desc.append("Start time: TBA on the school site")
+            desc.append("Start time: TBD (not yet posted by the school)")
+        if g.status:
+            desc.append(f"{g.status} on the school site")
         if g.result:
             desc.append(f"Result: {g.result}")
         desc.append(f"Official schedule: {SITE}{SPORT_PAGE}")
@@ -276,6 +333,8 @@ def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
         else:
             start = datetime.combine(g.day, g.start, TZ)
             lines += [f"DTSTART:{utc_stamp(start)}", f"DTEND:{utc_stamp(start + GAME_LENGTH)}"]
+        if g.status == "Cancelled":
+            lines.append("STATUS:CANCELLED")
         lines += [
             f"SUMMARY:{ics_escape(g.title)}",
             f"LOCATION:{ics_escape(g.location)}",
@@ -283,6 +342,19 @@ def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
             "CATEGORIES:Soccer",
             "END:VEVENT",
         ]
+        # A TBD game also gets a timed placeholder at the team's usual start, so it sits with the other games.
+        if g.start is None:
+            main_uid = next(l for l in reversed(lines) if l.startswith("UID:"))[4:]
+            start = datetime.combine(g.day, PLACEHOLDER_START, TZ)
+            ph_title = f"[Time TBD] Campo {g.label} Soccer {'vs' if g.home else '@'} {g.opponent} Placeholder"
+            if g.status:
+                ph_title = f"{g.status.upper()} – {ph_title}"
+            ph_desc = desc + ["Placeholder at 12:00-3:00 AM, as on the school's own calendar. The school hasn't "
+                              "posted the real time yet; this disappears once it does."]
+            lines += ["BEGIN:VEVENT", f"UID:placeholder-{main_uid}", f"DTSTAMP:{stamp}",
+                      f"DTSTART:{utc_stamp(start)}", f"DTEND:{utc_stamp(start + PLACEHOLDER_LENGTH)}",
+                      f"SUMMARY:{ics_escape(ph_title)}", f"LOCATION:{ics_escape(g.location)}",
+                      f"DESCRIPTION:{ics_escape(chr(10).join(ph_desc))}", "CATEGORIES:Soccer", "END:VEVENT"]
     lines.append("END:VCALENDAR")
     return "\r\n".join(fold(l) for l in lines) + "\r\n"
 
@@ -302,7 +374,7 @@ def build_csv(games: list[Game]) -> str:
             g.label,
             g.day.isoformat(),
             g.day.strftime("%a"),
-            g.start.strftime("%-I:%M %p") if g.start else "TBA",
+            g.start.strftime("%I:%M %p").lstrip("0") if g.start else "TBD",
             "Home" if g.home else "Away",
             g.opponent,
             g.location,
@@ -359,8 +431,9 @@ def describe_changes(old_json: Path, new_games: list[Game]) -> list[str]:
     for k in sorted(old_map.keys() - new_map.keys()):
         notes.append(f"Removed: {old_map[k]['label']} {k[1]} – {old_map[k]['title']}")
     for k in sorted(new_map.keys() & old_map.keys()):
-        a, b = old_map[k], new_map[k]
-        for field in ("start", "home", "location", "result"):
+        a, b = old_map[k], {**new_map[k]}
+        a.setdefault("status", "")
+        for field in ("start", "home", "location", "result", "status"):
             if a.get(field) != b.get(field):
                 notes.append(f"Changed {field}: {b['label']} {k[1]} vs {k[2]}: {a.get(field)} → {b.get(field)}")
     return notes
@@ -386,6 +459,7 @@ def main() -> int:
     levels = dict(DEFAULT_LEVELS) if args.fixtures else discover_levels(session)
 
     per_level: dict[str, list[Game]] = {}
+    problems: list[str] = []
     previous = json.loads((out / "schedule.json").read_text()) if (out / "schedule.json").exists() else []
     for level, team_id in levels.items():
         slug, label = LEVEL_INFO[level]
@@ -393,20 +467,26 @@ def main() -> int:
             html = (Path(args.fixtures) / f"{slug}.html").read_text(encoding="utf-8")
         else:
             html = http_get(session, SCHEDULE_ENDPOINT.format(team_id=team_id, year=school_year))
-        games = parse_schedule(html, level, school_year)
+        games, level_problems = parse_schedule(html, level, school_year)
+        problems += level_problems
 
-        if not games:
-            # Off-season or a site hiccup: keep whatever this level had before.
-            kept = [r for r in previous if r["slug"] == slug]
-            print(f"! {level}: no games found; keeping {len(kept)} previous games", file=sys.stderr)
-            games = [
-                Game(r["level"], r["slug"], r["label"], date.fromisoformat(r["day"]),
-                     time.fromisoformat(r["start"]) if r["start"] else None,
-                     r["home"], r["opponent"], r["facility"], r["city"], r["result"])
-                for r in kept
-            ]
+        if not games and not level_problems:
+            first, second = (int(y) for y in school_year.split("-"))
+            this_season = [r for r in previous if r["slug"] == slug
+                           and date(first, 7, 1) <= date.fromisoformat(r["day"]) < date(second, 7, 1)]
+            if this_season:
+                problems.append(f"{level}: the site now shows no games, but {len(this_season)} were listed this "
+                                f"season. The page may have changed; keeping the last good calendar.")
         per_level[slug] = games
         print(f"{level}: {len(games)} games")
+
+    if problems:
+        report = ["PROBLEM: " + p for p in problems] + ["Nothing was published; the calendars keep their last good version."]
+        print("\n".join(report), file=sys.stderr)
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+                f.write("### Campo soccer schedule check FAILED\n\n" + "\n".join(f"- {r}" for r in report) + "\n")
+        return 1
 
     all_games = sorted((g for gs in per_level.values() for g in gs),
                        key=lambda g: (g.day, g.start or time(0), g.slug))
@@ -428,9 +508,20 @@ def main() -> int:
     if write_if_changed(out / "schedule.json", build_json(all_games)):
         written.append("schedule.json")
 
+    (out / "status.json").write_text(json.dumps({
+        "last_checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "games": len(all_games),
+        "levels": {slug: len(gs) for slug, gs in per_level.items()},
+    }, indent=1) + "\n", encoding="utf-8")
+
     report = ["Updated: " + ", ".join(written)] if written else ["No schedule changes."]
     if written:
         report += changes
+    unknown = sorted({f"{g.opponent} ({g.city or 'city not listed'})" for g in all_games
+                      if not g.home and g.location not in OPPONENT_ADDRESSES.values()})
+    if unknown:
+        report.append("ADDRESS NEEDED (shown as school name + city until added to OPPONENT_ADDRESSES): "
+                      + "; ".join(unknown))
     print("\n".join(report))
     if os.environ.get("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
