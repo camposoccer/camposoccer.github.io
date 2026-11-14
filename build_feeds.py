@@ -522,9 +522,10 @@ def main() -> int:
     written = []
     for slug, games in per_level.items():
         label = LEVEL_INFO[next(l for l in LEVEL_INFO if LEVEL_INFO[l][0] == slug)][1]
-        if write_if_changed(out / f"{slug}.ics", build_ics(games, f"Campo {label} Boys Soccer", stamp), ics=True):
+        season = f"{school_year[:4]}-{school_year[-2:]}"  # e.g. 2026-27
+        if write_if_changed(out / f"{slug}.ics", build_ics(games, f"{season} Campo Boys Soccer – {label}", stamp), ics=True):
             written.append(f"{slug}.ics")
-    if write_if_changed(out / "all-levels.ics", build_ics(all_games, "Campo Boys Soccer (all levels)", stamp), ics=True):
+    if write_if_changed(out / "all-levels.ics", build_ics(all_games, f"{school_year[:4]}-{school_year[-2:]} Campo Boys Soccer – All Levels", stamp), ics=True):
         written.append("all-levels.ics")
     if write_if_changed(out / "schedule.csv", build_csv(all_games)):
         written.append("schedule.csv")
