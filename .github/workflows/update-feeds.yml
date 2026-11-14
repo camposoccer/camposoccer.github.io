@@ -61,4 +61,5 @@ jobs:
           else
             git commit -m "Schedule update $when"
           fi
-          git push
+          # If someone pushed while this run was working, rebase onto it and retry once.
+          git push || (git pull --rebase -q origin main && git push)

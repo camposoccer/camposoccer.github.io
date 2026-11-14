@@ -23,6 +23,7 @@ import argparse
 import csv
 import hashlib
 import io
+import html as html_lib
 import json
 import os
 import re
@@ -197,7 +198,7 @@ def site_statuses(soup) -> dict[tuple[str, str], str]:
         st = (j.get("eventStatus") or "").rsplit("/", 1)[-1]
         word = {"EventCancelled": "Cancelled", "EventPostponed": "Postponed", "EventRescheduled": "Rescheduled"}.get(st)
         if word and j.get("startDate"):
-            teams = [j.get("homeTeam", {}).get("name", ""), j.get("awayTeam", {}).get("name", "")]
+            teams = [html_lib.unescape(html_lib.unescape(j.get(k, {}).get("name", ""))) for k in ("homeTeam", "awayTeam")]
             opp = next((n for n in teams if "campolindo" not in n.lower()), "")
             out[(j["startDate"][:10], re.sub(r"[^a-z0-9]", "", opp.lower()))] = word
     return out
@@ -294,6 +295,16 @@ PLACEHOLDER_START = time(0, 0)            # TBD games: 12:00-3:00 AM, as on the 
 PLACEHOLDER_LENGTH = timedelta(hours=3)
 
 
+def campo_fields(g: Game, role: str) -> list[str]:
+    """Machine-readable details the independent checker reads instead of parsing titles."""
+    out = [f"X-CAMPO-ROLE:{role}", f"X-CAMPO-HOME:{'H' if g.home else 'A'}", f"X-CAMPO-OPPONENT:{ics_escape(g.opponent)}"]
+    if g.status:
+        out.append(f"X-CAMPO-STATUS:{g.status}")
+    if g.result:
+        out.append(f"X-CAMPO-RESULT:{ics_escape(g.result)}")
+    return out
+
+
 def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
     lines = [
         "BEGIN:VCALENDAR",
@@ -333,6 +344,7 @@ def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
         else:
             start = datetime.combine(g.day, g.start, TZ)
             lines += [f"DTSTART:{utc_stamp(start)}", f"DTEND:{utc_stamp(start + GAME_LENGTH)}"]
+        lines += campo_fields(g, "game")
         if g.status == "Cancelled":
             lines.append("STATUS:CANCELLED")
         lines += [
@@ -351,7 +363,8 @@ def build_ics(games: list[Game], cal_name: str, stamp: str) -> str:
                 ph_title = f"{g.status.upper()} – {ph_title}"
             ph_desc = desc + ["Placeholder at 12:00-3:00 AM, as on the school's own calendar. The school hasn't "
                               "posted the real time yet; this disappears once it does."]
-            lines += ["BEGIN:VEVENT", f"UID:placeholder-{main_uid}", f"DTSTAMP:{stamp}",
+            lines += ["BEGIN:VEVENT", f"UID:placeholder-{main_uid}", f"DTSTAMP:{stamp}", *campo_fields(g, "placeholder"),
+                      *(["STATUS:CANCELLED"] if g.status == "Cancelled" else []),
                       f"DTSTART:{utc_stamp(start)}", f"DTEND:{utc_stamp(start + PLACEHOLDER_LENGTH)}",
                       f"SUMMARY:{ics_escape(ph_title)}", f"LOCATION:{ics_escape(g.location)}",
                       f"DESCRIPTION:{ics_escape(chr(10).join(ph_desc))}", "CATEGORIES:Soccer", "END:VEVENT"]
@@ -442,6 +455,15 @@ def describe_changes(old_json: Path, new_games: list[Game]) -> list[str]:
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
+def write_status(out: Path, per_level: dict) -> None:
+    """Record every successful check (shown on the parent page; also keeps the repo active off-season)."""
+    (out / "status.json").write_text(json.dumps({
+        "last_checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "games": sum(len(gs) for gs in per_level.values()),
+        "levels": {slug: len(gs) for slug, gs in per_level.items()},
+    }, indent=1) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default="docs", help="output folder (default: docs)")
@@ -490,6 +512,7 @@ def main() -> int:
 
     all_games = sorted((g for gs in per_level.values() for g in gs),
                        key=lambda g: (g.day, g.start or time(0), g.slug))
+    write_status(out, per_level)
     if not all_games:
         print("No games found for any level; leaving existing files untouched.", file=sys.stderr)
         return 0
@@ -508,11 +531,6 @@ def main() -> int:
     if write_if_changed(out / "schedule.json", build_json(all_games)):
         written.append("schedule.json")
 
-    (out / "status.json").write_text(json.dumps({
-        "last_checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "games": len(all_games),
-        "levels": {slug: len(gs) for slug, gs in per_level.items()},
-    }, indent=1) + "\n", encoding="utf-8")
 
     report = ["Updated: " + ", ".join(written)] if written else ["No schedule changes."]
     if written:
