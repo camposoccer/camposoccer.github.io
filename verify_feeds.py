@@ -223,6 +223,7 @@ def main() -> int:
     ap.add_argument("--fixtures")
     a = ap.parse_args()
     year = a.year or school_year(datetime.now(TZ).date())
+    today = os.environ.get("VERIFY_TODAY") or datetime.now(TZ).date().isoformat()  # VERIFY_TODAY: for tests
     feeds = Path(a.feeds)
     errors, warnings, lines, school_only = [], [], [], []
 
@@ -260,12 +261,14 @@ def main() -> int:
             if statuses.get(g, "") != st:
                 errors.append(f"{lvl}: {fmt(g)} is {st.lower()} on the site but not marked in the calendar")
         if lvl in school_feeds:
-            sf = Counter(school_feeds[lvl])
+            # The school's feed drops games once they've been played, so compare upcoming games only.
+            upcoming = lambda c: Counter({g: n for g, n in c.items() if g[0] >= today})
+            sf, upcoming_want = upcoming(Counter(school_feeds[lvl])), upcoming(want)
             school_only += [f"{lvl}: in the school's own calendar feed but not on its schedule page: {fmt(g)}"
-                            for g in diff(sf, want)]
+                            for g in diff(sf, upcoming_want)]
             school_only += [f"{lvl}: on the schedule page but not in the school's own calendar feed: {fmt(g)}"
-                            for g in diff(want, sf)]
-        src = f", school feed {len(school_feeds[lvl])}" if lvl in school_feeds else ""
+                            for g in diff(upcoming_want, sf)]
+        src = f", school feed {len(school_feeds[lvl])} upcoming" if lvl in school_feeds else ""
         lines.append(f"{lvl}: site {len(off_games)} games{src}, calendar {len(feed_games)}")
 
     allp = feeds / "all-levels.ics"
