@@ -56,7 +56,7 @@ jobs:
           # status.json records every successful check (shown on the parent page),
           # so every passing run commits; that also keeps GitHub from pausing the
           # schedule after 60 quiet days.
-          if git diff --cached --quiet -- docs ':!docs/status.json'; then
+          if git diff --cached --quiet -- docs ':!docs/status.json' ':!docs/school-feed-pending.json'; then
             git commit -q -m "Checked $when: no schedule changes" || true
           else
             git commit -m "Schedule update $when"
